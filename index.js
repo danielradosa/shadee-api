@@ -46,20 +46,21 @@ async function getShader(shaderId) {
     return null
 }
 
-// routes
 app.post("/save", async (req, res) => {
-    const { source } = req.body
-    if (!source) return res.status(400).json({ error: "No shader source" })
-    const shaderId = id()
-    await storeShader(shaderId, source)
-    res.json({ id: shaderId, link: `${req.protocol}://${req.get("host")}/view/${shaderId}` })
-})
+    const { source } = req.body;
+    if (!source) return res.status(400).json({ error: "⚠️ No shader source" });
+
+    const shaderId = id();
+    await storeShader(shaderId, source);
+
+    res.json({ id: shaderId });
+});
 
 app.get("/view/:id", async (req, res) => {
-    const shader = await getShader(req.params.id)
-    if (!shader) return res.status(404).send("Shader not found")
-    res.json(shader)
-})
+    const shader = await getShader(req.params.id);
+    if (!shader) return res.status(404).send("❌ Shader not found");
+    res.json(shader);
+});
 
 // start server
 const PORT = process.env.PORT || 3000
